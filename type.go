@@ -1,6 +1,9 @@
 package goquery
 
 import (
+	"appengine"
+	"appengine/urlfetch"
+
 	"errors"
 	"io"
 	"net/http"
@@ -32,6 +35,18 @@ func NewDocumentFromNode(root *html.Node) *Document {
 func NewDocument(url string) (*Document, error) {
 	// Load the URL
 	res, e := http.Get(url)
+	if e != nil {
+		return nil, e
+	}
+	return NewDocumentFromResponse(res)
+}
+
+// NewDocumentAppEngine is the equivalent of NewDocument but for running on
+// Google's App Engine platform.
+func NewDocumentAppEngine(c appengine.Context, url string) (*Document, error) {
+	// Load the URL
+	client := urlfetch.Client(c)
+	res, e := client.Get(url)
 	if e != nil {
 		return nil, e
 	}

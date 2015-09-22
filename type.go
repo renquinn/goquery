@@ -1,7 +1,6 @@
 package goquery
 
 import (
-	"google.golang.org/appengine"
 	"google.golang.org/appengine/urlfetch"
 
 	"errors"
@@ -9,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"golang.org/x/net/context"
 	"golang.org/x/net/html"
 )
 
@@ -43,7 +43,7 @@ func NewDocument(url string) (*Document, error) {
 
 // NewDocumentAppEngine is the equivalent of NewDocument but for running on
 // Google's App Engine platform.
-func NewDocumentAppEngine(c appengine.Context, url string) (*Document, error) {
+func NewDocumentAppEngine(c context.Context, url string) (*Document, error) {
 	// Load the URL
 	client := urlfetch.Client(c)
 	res, e := client.Get(url)
